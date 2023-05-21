@@ -15,20 +15,21 @@ RUN useradd --create-home --no-log-init --shell /bin/bash myuser \
 RUN echo 'myuser ALL=(ALL) NOPASSWD:ALL' >>  /etc/sudoers
 WORKDIR "/home/myuser/"
 USER myuser
-RUN git clone https://github.com/AUTOMATIC1111/stable-diffusion-webui
-RUN git clone https://github.com/bmaltais/kohya_ss
-RUN sudo ./kohya_ss/setup.sh -d ./kohya_ss -u -v
-RUN cp ./stable-diffusion-webui/launch.py ./stable-diffusion-webui/launch_bak.py
-RUN sed -i '$d' ./stable-diffusion-webui/launch.py
+
+CMD git clone https://github.com/AUTOMATIC1111/stable-diffusion-webui
+CMD git clone https://github.com/bmaltais/kohya_ss
+CMD sudo ./kohya_ss/setup.sh -d ./kohya_ss -u -v
+CMD cp ./stable-diffusion-webui/launch.py ./stable-diffusion-webui/launch_bak.py
+CMD sed -i '$d' ./stable-diffusion-webui/launch.py
 ARG TORCH_COMMAND="pip install torch==2.0.0 torchvision torchaudio xformers"
-RUN ./stable-diffusion-webui/webui.sh -port 80 -listen -enable-insecure-extension-access
-RUN cp ./stable-diffusion-webui/launch_bak.py ./stable-diffusion-webui/launch.py
-RUN rm ./stable-diffusion-webui/launch_bak.py
+CMD ./stable-diffusion-webui/webui.sh -port 80 -listen -enable-insecure-extension-access
+CMD cp ./stable-diffusion-webui/launch_bak.py ./stable-diffusion-webui/launch.py
+CMD rm ./stable-diffusion-webui/launch_bak.py
 # RUN source ./stable-diffusion-webui/venv/bin/activate
 # RUN python3 -m pip uninstall torch torchvision torchaudio xformers -y
 # RUN python3 -m pip --no-cache-dir install torch==2.0.0 xformers torchvision torchaudio
 # RUN deactivate
-RUN wget -q https://huggingface.co/runwayml/stable-diffusion-v1-5/resolve/main/v1-5-pruned-emaonly.safetensors -O /home/myuser/stable-diffusion-webui/models/Stable-diffusion/v1-5-pruned-emaonly.safetensors 
+CMD wget -q https://huggingface.co/runwayml/stable-diffusion-v1-5/resolve/main/v1-5-pruned-emaonly.safetensors -O /home/myuser/stable-diffusion-webui/models/Stable-diffusion/v1-5-pruned-emaonly.safetensors 
 # CMD ["/bin/bash", "-c", "./stable-diffusion-webui/webui.sh", "--port", "80", "--listen", "--enable-insecure-extension-access", "&" "/bin/bash", "-c", "./kohya_ss/gui.sh", "--listen", "0.0.0.0", "--server_port", "8080"]
 CMD ./stable-diffusion-webui/webui.sh --port  80  --listen --enable-insecure-extension-access & ./kohya_ss/gui.sh --listen 0.0.0.0 --server_port 8080
  
