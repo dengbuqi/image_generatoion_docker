@@ -11,7 +11,6 @@ jobs:
           docker version
           # 登录阿里云镜像仓库
           docker login --username=${{ secrets.DOCKER_USERNAME }} --password=${{ secrets.DOCKER_PASSWORD }}  registry.cn-shanghai.aliyuncs.com
-          cd xxl-job-admin
           # 使用Dockerfile构建镜像
           docker build . --file Dockerfile --tag  registry.cn-shanghai.aliyuncs.com/image-generation/sd_kohya_ss:latest
           # 推送镜像到镜像仓库
