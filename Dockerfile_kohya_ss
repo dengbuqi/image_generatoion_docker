@@ -1,0 +1,21 @@
+FROM nvidia/cuda:12.1.1-runtime-ubuntu22.04
+#copy run.sh /usr/local/
+ARG DEBIAN_FRONTEND=noninteractive
+ARG COMMANDLINE_ARGS=--skip-torch-cuda-test
+ENV TZ=Asia/Beijing
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+RUN apt update -y && apt -y upgrade
+RUN apt -y install sudo git apt-utils dialog git-lfs wget python3 python3-pip python3-venv python3-tk ffmpeg libsm6 libxext6 tzdata
+RUN apt -y install --no-install-recommends google-perftools
+RUN apt clean
+RUN ln -s /usr/bin/python3 /usr/bin/python
+RUN useradd --create-home --no-log-init --shell /bin/bash myuser \
+    && adduser myuser sudo \
+    && echo "myuser:myuser" | chpasswd
+RUN echo 'myuser ALL=(ALL) NOPASSWD:ALL' >>  /etc/sudoers
+WORKDIR "/home/myuser/"
+USER myuser
+CMD git clone https://github.com/bmaltais/kohya_ss
+CMD sudo ./kohya_ss/setup.sh -d ./kohya_ss -u -v
+CMD ./kohya_ss/gui.sh --listen 0.0.0.0 --server_port 80
+ 
