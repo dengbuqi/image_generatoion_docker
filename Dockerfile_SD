@@ -16,10 +16,10 @@ RUN echo 'myuser ALL=(ALL) NOPASSWD:ALL' >>  /etc/sudoers
 WORKDIR "/home/myuser/"
 USER myuser
 
+ARG TORCH_COMMAND="pip install torch==2.0.0 torchvision torchaudio xformers"
 CMD git clone https://github.com/AUTOMATIC1111/stable-diffusion-webui
 CMD cp ./stable-diffusion-webui/launch.py ./stable-diffusion-webui/launch_bak.py
 CMD sed -i '$d' ./stable-diffusion-webui/launch.py
-ARG TORCH_COMMAND="pip install torch==2.0.0 torchvision torchaudio xformers"
 CMD ./stable-diffusion-webui/webui.sh -port 80 -listen -enable-insecure-extension-access
 CMD cp ./stable-diffusion-webui/launch_bak.py ./stable-diffusion-webui/launch.py
 CMD rm ./stable-diffusion-webui/launch_bak.py

@@ -17,5 +17,5 @@ WORKDIR "/home/myuser/"
 USER myuser
 CMD git clone https://github.com/bmaltais/kohya_ss
 CMD sudo ./kohya_ss/setup.sh -d ./kohya_ss -u -v
-CMD ./kohya_ss/gui.sh --listen 0.0.0.0 --server_port 80
+CMD ./kohya_ss/gui.sh --listen 0.0.0.0 --server_port 8080
  
